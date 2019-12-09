@@ -17,27 +17,39 @@ var (
 	invert      bool
 	insensitive bool
 	expr        string
+	help        bool
 	args        []string
+	name        bool
 	files       map[string]*strings.Builder
 	mutex       *sync.Mutex
 )
 
+// Parse all the flag arguments and make the mutex lock
 func init() {
-	flag.BoolVar(&invert, "v", false, "Match all lines not containg REGEXP")
-	flag.BoolVar(&insensitive, "i", false, "Match REGEXP with case insensitivity")
-	flag.StringVar(&expr, "e", "", "The REGEXP to match")
+	flag.BoolVar(&invert, "v", false, "Match all lines not containg string")
+	flag.BoolVar(&insensitive, "i", false, "Match string with case insensitivity")
+	flag.BoolVar(&help, "h", false, "Print this help message")
+	flag.BoolVar(&name, "f", false, "Prints the file name for each of the files")
 	flag.Parse()
-	args = flag.Args()
+
+	if len(flag.Args()) != 0 {
+		expr = flag.Args()[0]
+		args = flag.Args()[1:]
+
+	}
 
 	files = make(map[string]*strings.Builder)
 
 	mutex = new(sync.Mutex)
 
+	// This makes a case insensitive regexp
 	if insensitive {
 		expr = "(?i)(" + expr + ")"
 	}
+
 }
 
+// Appends the text to the map value. This is thread-safe
 func updateMapValue(fileName string, text string) {
 
 	mutex.Lock()
@@ -54,12 +66,13 @@ func updateMapValue(fileName string, text string) {
 	mutex.Unlock()
 }
 
+// Scans the file for lines that match the search expression.
 func grepFile(fileName string, expr string, scanner *bufio.Scanner) {
 
 	var text string
 
 	reg := regexp.MustCompile(expr)
-
+	lineNum := 1
 	for scanner.Scan() {
 
 		text = scanner.Text()
@@ -71,15 +84,32 @@ func grepFile(fileName string, expr string, scanner *bufio.Scanner) {
 			for _, l := range loc {
 				text = text[0:l[0]] + color.RedString(text[l[0]:l[1]]) + text[l[1]:]
 			}
+
+			if name {
+				text = color.YellowString("%v: ", lineNum) + text
+			}
 			updateMapValue(fileName, text)
 		} else if invert {
+
+			if name {
+				text = color.YellowString("%v: ", lineNum) + text
+			}
 			updateMapValue(fileName, text)
 		}
 
+		lineNum++
 	}
 }
 
+// The main routine for the function
 func main() {
+
+	if help {
+		fmt.Println("Usage: gogrep [flags] string [args...]")
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
+
 	var wg sync.WaitGroup
 	var names []string
 
@@ -121,6 +151,9 @@ func main() {
 	wg.Wait()
 
 	for _, n := range names {
+		if name {
+			fmt.Println(color.GreenString(n) + ": ")
+		}
 		fmt.Print(files[n].String())
 	}
 }
