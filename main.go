@@ -5,13 +5,14 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"github.com/fatih/color"
 	"log"
 	"os"
 	"path"
 	"regexp"
 	"strings"
 	"sync"
+
+	"github.com/fatih/color"
 )
 
 var (
