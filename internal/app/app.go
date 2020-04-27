@@ -25,6 +25,11 @@ func NewApp() *cli.App {
 				Value: false,
 			},
 			&cli.BoolFlag{
+				Name: "smart-case, s",
+				Usage: "Performs a smart-case search of `PATTERN`.",
+				Value: false,
+			},
+			&cli.BoolFlag{
 				Name:  "invert-match, v",
 				Usage: "Invert matchings. Prints lines that do not match the patterns",
 				Value: false,
@@ -72,6 +77,11 @@ func NewApp() *cli.App {
 			&cli.BoolFlag{
 				Name: "list-files-without-match, L",
 				Usage: "Lists all the files that do not contain a match",
+				Value: false,
+			},
+			&cli.BoolFlag{
+				Name: "no-file-headers",
+				Usage: "Supress file headers in the output.",
 				Value: false,
 			},
 			&cli.BoolFlag{
