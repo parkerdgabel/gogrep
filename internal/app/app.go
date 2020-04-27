@@ -102,21 +102,21 @@ func NewApp() *cli.App {
 				Name: "output, o",
 				Usage: "Specifies the output destination, either a FILE or a network connection.",
 			},
-			&cli.StringFlag{
+			&cli.StringSliceFlag{
 				Name: "files, f",
-				Usage: "Search all files matching `GLOB`.",
+				Usage: "Search all files matching `GLOB`(comma-delimited list).",
 			},
-			&cli.StringFlag{
+			&cli.StringSliceFlag{
 				Name: "path, P",
-				Usage: "Search all paths matching `GLOB`.",
+				Usage: "Search all paths matching `GLOB`(comma-delimited list).",
 			},
-			&cli.StringFlag{
+			&cli.StringSliceFlag{
 				Name: "exclude-files",
-				Usage: "Excludes all files matching `GLOB` from the search.",
+				Usage: "Excludes all files matching `GLOB` from the search(comma-delimited list).",
 			},
-			&cli.StringFlag{
+			&cli.StringSliceFlag{
 				Name: "exclude-path",
-				Usage: "Excludes all paths matching `GLOB` from the search.",
+				Usage: "Excludes all paths matching `GLOB` from the search.(comma-delimited list)",
 			},
 		},
 		Action: func(c *cli.Context) error {
