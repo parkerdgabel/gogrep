@@ -160,6 +160,26 @@ func (o *Option) ShouldSearchBinaries() bool {
 	return o.binary
 }
 
+// HasIncludedFiles returns true if there are any included files to search.
+func (o *Option) HasIncludedFiles() bool {
+	return len(o.fileOpts.IncludedFiles) != 0
+}
+
+// HasIncludedFiles returns true if there are any included paths to seach.
+func (o *Option) HasIncludedPaths() bool {
+	return len(o.fileOpts.IncludedPaths) != 0
+}
+
+// HasExcludedFiles returns true if there are any excluded files to search.
+func (o *Option) HasExcludedFiles() bool {
+	return len(o.fileOpts.ExcludedFiles) != 0
+}
+
+//  HasExcludedPaths returns true  if there are any paths to exclude.
+func (o *Option) HasExcludedPaths() bool {
+	return len(o.fileOpts.ExcludedPaths) != 0
+}
+
 type optionsError struct {
 	s string
 }
