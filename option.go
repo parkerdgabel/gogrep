@@ -131,53 +131,104 @@ type Option struct {
 }
 
 // IsSearchCaseSensitive returns true if the search is supposed to be case sensitive.
-func (o *Option) IsSearchCaseSensitive() bool {
+func (o Option) IsSearchCaseSensitive() bool {
 	return o.caseS == Sensitive
 }
 
+// IsSearchCaseInsensitive returns true it the seach is supposed to be case insensitive.
+func (o Option) IsSearchCaseInsensitive() bool {
+	return o.caseS == Insensitive
+}
+
 // IsSearchSmartCase returns true if the search is supposed to be a smart case search.
-func (o *Option) IsSearchSmartCase() bool {
+func (o Option) IsSearchSmartCase() bool {
 	return o.caseS == Smart
 }
 
+
 // IsSearchInverted returns true if the search should produce inverted matchings.
-func (o *Option) IsSearchInverted() bool {
+func (o Option) IsSearchInverted() bool {
 	return o.invert
 }
 
 // IsSearchRecursive returns true if the search should recursively search directories.
-func (o *Option) IsSearchRecursive() bool {
+func (o Option) IsSearchRecursive() bool {
 	return o.recurse
 }
 
 // ShouldSearchgitignore returns true if the search should search files matched in a gitignore file.
-func (o *Option) ShouldSearchGitignore() bool {
+func (o Option) ShouldSearchGitignore() bool {
 	return o.gitignore
 }
 
 // ShouldSearchBinaries returns true if the search should seach binary files.
-func (o *Option) ShouldSearchBinaries() bool {
+func (o Option) ShouldSearchBinaries() bool {
 	return o.binary
 }
 
 // HasIncludedFiles returns true if there are any included files to search.
-func (o *Option) HasIncludedFiles() bool {
+func (o Option) HasIncludedFiles() bool {
 	return len(o.fileOpts.IncludedFiles) != 0
 }
 
 // HasIncludedFiles returns true if there are any included paths to seach.
-func (o *Option) HasIncludedPaths() bool {
+func (o Option) HasIncludedPaths() bool {
 	return len(o.fileOpts.IncludedPaths) != 0
 }
 
 // HasExcludedFiles returns true if there are any excluded files to search.
-func (o *Option) HasExcludedFiles() bool {
+func (o Option) HasExcludedFiles() bool {
 	return len(o.fileOpts.ExcludedFiles) != 0
 }
 
 //  HasExcludedPaths returns true  if there are any paths to exclude.
-func (o *Option) HasExcludedPaths() bool {
+func (o Option) HasExcludedPaths() bool {
 	return len(o.fileOpts.ExcludedPaths) != 0
+}
+
+// IsOutputColored returns true if the output is suppoesed to be supressed.
+func (o Option) IsOutputQuiet() bool {
+	return o.output.Quiet
+}
+
+// IsOutputColored returns true if the output should be colored.
+func (o Option) IsOutputColored() bool {
+	return o.output.Color
+}
+
+// IsOutputSTDOUT returns true if the output destination is STDOUT.
+func (o Option) IsOutputSTDOUT() bool {
+	return o.output.Destination == "STDOUT"
+}
+
+// IsOutputUnordered returns true if the output should be unordered.
+func (o Option) IsOutputUnordered() bool {
+	return o.output.Unordered
+}
+
+// ShouldOutputContainStats returns true if the output should contain a stats output at the end.
+func (o Option) ShouldOutputContainStats() bool {
+	return o.output.Stats
+}
+
+// ShouldOutputContainHeaders returns true if the output should contain file headers.
+func (o Option) ShouldOutputContainHeaders() bool {
+	return o.output.Headers
+}
+
+// ShouldOutputContainLineNumbers return true if the the output should have line numbers.
+func (o Option) ShouldOutputContainLineNumbers() bool {
+	return o.output.LineNums
+}
+
+// IsOutputFilesWithMatch returns true if only files with matchs should be printed
+func (o Option) IsOutputFilesWithMatch() bool {
+	return o.output.FilesWithMatch
+}
+
+// IsOutputFilesWithoutMatch returns true if only files without matchs should be printed
+func (o Option) IsOutputFilesWithoutMatch() bool {
+	return o.output.FilesWithoutMatch
 }
 
 type optionsError struct {
